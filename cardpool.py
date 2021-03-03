@@ -55,14 +55,56 @@ class minion():
         'multiple_deathrattle': baren->2; gold baren->3
         }
         '''
+'''
+To do list:
+--------------------
+first version:::::
+deathrattle:
+FiendishServant,
+Scallywag
+
+start of combat:
+RedWhelp
+
+ScavengingHyena
+--------------------
+battlecry:
+RockpoolHunter
+Alleycat
+DeckSwabbie
+RefreshingAnomaly
+RockpoolHunter
+ValgarHomunculus
+
+other:
+MurlocTidecaller
+MicroMummy
+MicroMachine
+WrathWeaver
+'''
+
+
 #1 star minion:
-RockpoolHunter = minion(2, 3, 1, name = 'Rockpool Hunter', type_ = 'murloc', battlecry = None)
+RockpoolHunter = minion(2, 3, 1, name = 'Rockpool Hunter', type_ = 'Murloc', battlecry = None)
 AcolyteOfCThun = minion(2, 2, 1, name = 'Acolyte of C\'Thun', taunt = True, reborn = True)
-Alleycat = minion(1, 1, 1, name = 'Alleycat', battlecry = None)
-Tabbycat = minion(1, 1, 1, name = 'Tabbycat')
-
-
-
+Alleycat = minion(1, 1, 1, name = 'Alleycat', battlecry = None, type_ = 'Beast')
+Tabbycat = minion(1, 1, 1, name = 'Tabbycat', type_ = 'Beast')
+DeckSwabbie = minion(2, 2, 1, name = 'Deck Swabbie', type_ = 'Pirate')
+DragonspawnLieutenant = minion(2, 3, 1, name = 'Dragonspawn Lieutenant', taunt = True, type_ = 'Dragon')
+FiendishServant = minion(2, 1, 1, name = 'Fiendish Servant', deathrattle = None, type_ = 'Demon')
+MicroMachine = minion(1, 2, 1, name = 'Micro Machine', type_ = 'Mech')
+MicroMummy = minion(1, 2, 1, name = 'Micro Mummy', reborn = True, type_ = 'Mech')
+MurlocTidecaller = minion(1, 2, 1, name = 'Murloc Tidecaller', type_ = 'Murloc')
+MurlocTidehunter = minion(2, 1, 1, name = 'Murloc Tidehunter', battlecry = None, type_ = 'Murloc')
+MurlocScout = minion(1, 1, 1, name = 'Murloc Scout', type_ = 'Murloc')
+RedWhelp = minion(1, 2, 1, name = 'Red Whelp', type_ = 'Dragon')
+RefreshingAnomaly = minion(1, 3, 1, name = 'Refreshing Anomaly', type_ = 'Elemental')
+Scallywag = minion(2, 1, 1, name = 'Scallywag', type_ = 'Pirate')
+SkyPirate = minion(1, 1, 1, name = 'Sky Pirate', type_ = 'Pirate')
+ScavengingHyena = minion(2, 2, 1, name = 'Scavenging Hyena', type_ = 'Beast')
+Sellemental = minion(2, 2, 1, name = 'Sellemental', type_ = 'Elemental')
+ValgarHomunculus = minion(2, 4, 1, name = 'Valgar Homunculus', type_ = 'Demon')
+WrathWeaver = minion(1, 3, 1, name = 'Wrath Weaver')
 
 
 
