@@ -15,6 +15,7 @@ card_pool:
 '''
 from cardpool import *
 import random
+import copy
 
 class minion_skill_round_start_effect():
 
@@ -196,24 +197,25 @@ class battlegrounds():
         attacker_deck.deck[attacker_position].blood -= (defender_deck.deck[defender_position].attack*defender_coef)
 
         ##cleave effect
-        ###cleave right
-        if defender_position+1 < defender_deck.check_length():
-            if defender_deck.deck[defender_position+1].shield:
-                defender_deck.deck[defender_position+1].shield = False
-            else:
-                defender_deck.deck[defender_position+1].blood -= (attacker_deck.deck[attacker_position].attack)
+        if attacker_deck.deck[attacker_position].cleave:
+            ###cleave right
+            if defender_position+1 < defender_deck.check_length():
+                if defender_deck.deck[defender_position+1].shield:
+                    defender_deck.deck[defender_position+1].shield = False
+                else:
+                    defender_deck.deck[defender_position+1].blood -= (attacker_deck.deck[attacker_position].attack)
 
-        ###cleave left
-        if defender_position-1 >= 0:
-            if defender_deck.deck[defender_position-1].shield:
-                defender_deck.deck[defender_position-1].shield = False
-            else:
-                defender_deck.deck[defender_position-1].blood -= (attacker_deck.deck[attacker_position].attack)
+            ###cleave left
+            if defender_position-1 >= 0:
+                if defender_deck.deck[defender_position-1].shield:
+                    defender_deck.deck[defender_position-1].shield = False
+                else:
+                    defender_deck.deck[defender_position-1].blood -= (attacker_deck.deck[attacker_position].attack)
 
         ####
         attacker_deck.deck[attacker_position].already_attacked = True
 
-    def combat(self):
+    def combat(self, verbose = False):
     
         ##determine first attacker
         ##self.attacker = True -----> A
@@ -248,12 +250,16 @@ class battlegrounds():
 
         #physical combat start
         while(self.A_deck.check_length() > 0 and self.B_deck.check_length() > 0):
+            if verbose:
+                self.visulization()
+
             if self.attacker:
                 self.minion_combat(self.A_deck, self.B_deck, self.A_deck_attacker_position)
                 #check death and deathrattle
                 self.A_deck.apply_all_deathrattle()
                 self.B_deck.apply_all_deathrattle() 
                 #check_attacker_position
+                self.B_deck_attacker_position = self.B_deck.check_attacker_position()
                 self.A_deck_attacker_position = self.A_deck.check_attacker_position()
             else:
                 self.minion_combat(self.B_deck, self.A_deck, self.B_deck_attacker_position)
@@ -261,6 +267,7 @@ class battlegrounds():
                 self.B_deck.apply_all_deathrattle()
                 self.A_deck.apply_all_deathrattle()
                 #check_attacker_position
+                self.A_deck_attacker_position = self.A_deck.check_attacker_position()
                 self.B_deck_attacker_position = self.B_deck.check_attacker_position()
 
             #change attacker from A to B, or B to A
@@ -273,18 +280,45 @@ class battlegrounds():
         else:
             return('tie')
 
+    def visulization_single(self, deck):
+        vis_list = []
+        for i in deck.deck:
+            status = ''
+            if i.shield:
+                status += 'S'
+            if i.taunt:
+                status +='T'
+            if i.reborn:
+                status += 'R'
+            vis_list.append((status, i.attack, i.blood))
+        return(vis_list)
+
+    def visulization(self):
+        B_vis = self.visulization_single(self.B_deck)
+        A_vis = self.visulization_single(self.A_deck)
+        print('==================================')
+        print(B_vis)
+        print('----------------------------------')
+        print(A_vis)
+        print('==================================')
+
+
+
+
+
 class combat_calculator():
-    def __init__(self, A_deck, B_deck, N = 100):
+    def __init__(self, N = 1000):
         #player represent A_deck
-        self.A_deck = A_deck
-        self.B_deck = B_deck
         self.N = N
-    def calculate(self):
+    def calculate(self, A_deck, B_deck):
         A_win = 0
         B_win = 0
         tie = 0
-        for _ in range(self.N):
-            result = battlegrounds(self.A_deck, self.B_deck)
+        for i in range(self.N):
+            A_cp = copy.deepcopy(A_deck)
+            B_cp = copy.deepcopy(B_deck)
+            bg = battlegrounds(A_cp, B_cp)
+            result = bg.combat(verbose = False)
             if result == 'A':
                 A_win += 1
             elif result == 'B':
@@ -300,11 +334,18 @@ def main():
     B_deck = deck()
 
     A_deck.add(RockpoolHunter)
+    A_deck.add(DragonspawnLieutenant)
+    A_deck.add(SkyPirate)
+    
+    B_deck.add(ValgarHomunculus)
     B_deck.add(AcolyteOfCThun)
+    #B_deck.add(RedWhelp)
+    
+
 
     #bg = battlegrounds(A_deck, B_deck)
-    cc = combat_calculator(A_deck, B_deck)
-    cc.calculate()
+    cc = combat_calculator()
+    cc.calculate(A_deck, B_deck)
 
 
 
